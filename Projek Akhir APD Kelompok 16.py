@@ -13,11 +13,17 @@ Tujuan  : Menyimpan data pasien di rumah sakit
 
 """
 
+import datetime as dt
+from os import system
+import getpass as gp
+from colorama import Fore, Back
+
 accounts = [{"Username" : "admin", "Password" : "000"},
         {"Username" : "staff", "Password" : "123"}]
 
 
 #========================================== DATA PASIEN =============================================
+
 
 services = {
     "Medical Check Up" : [],
@@ -25,71 +31,44 @@ services = {
     "Rawat Inap" : [],
     "Gawat Darurat" : []}
 
-
-#--------------------------------- MEDICAL CHECK UP FORM --------------------------------------
-
-
-formMCU = (
+# MEDICAL CHECK UP FORM --------------------------------------
+MCU_form = (
     {"Registrasi" : ("Tanggal Registrasi", "No. Pasien")},
     {"Identitas Pasien" : ("Nama Lengkap", "Tempat, Tanggal Lahir",  "Jenis Kelamin", "Pekerjaan", "Telepon/Handphone", "Alamat Lengkap")},
     {"Kebiasaan" : ("Olahraga", "Merokok", "Alkohol", "Minum Kopi")},
     {"Riwayat Penyakit Keluarga" : ("Penyakit Jantung", "Penyakit Darah Tinggi", "Penyakit Kencing Manis", "Penyakit Stroke", "Penyakit Paru")}
     )
-
-
-patientsMCU = services["Medical Check Up"]
-
-
-#----------------------------------- RAWAT JALAN FORM --------------------------------------
-
-
-formRawatJalan = (
+MCU_patients = services["Medical Check Up"]
+# RAWAT JALAN FORM -------------------------------------------
+RawatJalan_form = (
     {"Registrasi" : ("Tanggal Registrasi", "No. Pasien")},
     {"Identitas Pasien" : ("Nama Lengkap", "Tempat, Tanggal Lahir",  "Jenis Kelamin", "Agama", "Pendidikan Terakhir", "Pekerjaan", "Telepon/Handphone", "Alamat Lengkap", "Status Pernikahan")},
     {"Sebab Perawatan" : ("Keluhan Pasien",)},
     {"Identitas Penanggungjawab" : ("Nama Lengkap", "Telepon/Handphone", "Alamat Lengkap", "Hubungan dengan Pasien")}
     )
-
-patientsRawatJalan = services["Rawat Jalan"]
-
-
-#------------------------------------ RAWAT INAP FORM --------------------------------------
-
-
-formRawatInap = (
+RawatJalan_patients = services["Rawat Jalan"]
+# RAWAT INAP FORM --------------------------------------------
+RawatInap_form = (
     {"Registrasi" : ("Tanggal Registrasi", "No. Pasien")},
     {"Identitas Pasien" : ("Nama Lengkap", "Tempat, Tanggal Lahir", "Jenis Kelamin", "Alamat Lengkap", "No. KTP/SIM/PASPOR","Pendidikan Terakhir", "Pekerjaan", "Telepon/Handphone", "Alamat Tempat Kerja", "Warga Negara")},
     {"Anamnesis" : ("Keluhan Utama", "Riwayat Alergi", "Riwayat Transfusi Darah", "Riwayat Merokok", "Riwayat Minum Alkohol", "Riwayat Penyakit Keluarga")},
     {"Identitas Penanggungjawab" : ("Nama Lengkap", "Telepon/Handphone", "Alamat Lengkap", "Pekerjaan", "Alamat Tempat Kerja", "Hubungan dengan Pasien")},
     {"Kelas Perawatan yang Diminta" : ("Kelas Perawatan", "Kamar, Lantai", "Tanggal Masuk, Jam", "Asal Pasien (IGD/IRJ)")}
     )
-
-patientsRawatInap = services["Rawat Inap"]
-
-
-#----------------------------------- GAWAT DARURAT FORM --------------------------------------
-
-
-formGawatDarurat = (
+RawatInap_patients = services["Rawat Inap"]
+# GAWAT DARURAT FORM -----------------------------------------
+GawatDarurat_form = (
     {"Registrasi" : ("Tanggal Registrasi", "No. Pasien")},
     {"Identitas Pasien" : ("Nama Lengkap", "Tempat, Tanggal Lahir", "Jenis Kelamin", "Pendidikan", "Alamat Lengkap", "Pekerjaan", "Telepon/Handphone", "Tanggal Masuk IGD")},
     {"Identitas yang Berhubungan" : ("Nama Ayah/Ibu/Suami/Istri", "Telepon/Handphone", "Penanggungjawab Pasien", "Telepon/Handphone")},
     {"Anamnesis" : ("Keluhan Utama", "Riwayat Penyakit Keluarga", "Riwayat Alergi")},
     {"Triage Status" : ("Biru/Merah/Kuning/Hijau", "Keadaan Umum", "Pernapasan", "Sirkulasi")}
     )
-
-patientsGawatDarurat = services["Gawat Darurat"]
-
+GawatDarurat_patients = services["Gawat Darurat"]
 
 
 #=========================================== PROGRAM ==============================================
 
-
-import datetime as dt
-from os import system
-import getpass as gp
-from colorama import Fore, Back
-import sys
 
 # CLEAR --> untuk membersihkan halaman
 def clear(): 
@@ -114,14 +93,11 @@ def date():
 def welcome(warning): 
     while True:
         clear()
-
-        print("\n\n\n\n\n\n")
+        print("\n\n\n\n\n\n\n\n")
         
-        guide_color("[Kode exit : exit010]")
-        print()
-        print("\033[01m  Selamat datang di Rumah Sakit Sejahtera!  \033[0m ".center(110))
+        print("\033[01m  Selamat datang di Rumah Sakit Sejahtera!  \033[0m ".center(110), "\n")
 
-        print("\n", Fore.RED + f"{warning}".center(100) + Fore.RESET, "\n")
+        print(Fore.RED + f"{warning}".center(100) + Fore.RESET, "\n")
 
         print("Pilih mode berikut.".center(100))
         guide_color("(Ketik '0' untuk keluar dari program)")
@@ -143,9 +119,6 @@ def welcome(warning):
         elif mode == "":
             welcome("Harap pilih opsi terlebih dahulu!")
 
-        elif mode == "exit010":
-            if exit_code() is True :
-                welcome("Anda telah keluar menggunakan kode eksekusi. ")
         else:
             welcome("Opsi tidak tersedia!")
 
@@ -157,9 +130,10 @@ def welcome(warning):
 def logIn():
     def logging_in(unameCounter, pwCounter, warning):
         clear()
-        print("\n\n\n\n\n")
+        print("\n\n\n\n\n\n")
 
         print("Log In Staff Rumah Sakit".center(100))
+        guide_color("(Ketik '*' untuk membatalkan log in)")
 
         if on_the_new_page() is True:
             global user
@@ -178,12 +152,9 @@ def logIn():
                 user.append(username)
                 pass
 
-            elif username == "exit010":
-                if exit_code() is True :
-                    close_the_page()
-                    welcome("Anda telah keluar menggunakan kode eksekusi. ")
-                else:
-                    on_the_same_page()
+            elif username == "*":
+                close_the_page()
+                welcome("Proses log in dibatalkan.")
 
              # jika username salah
             else:
@@ -204,12 +175,9 @@ def logIn():
             close_the_page()
             staff_MainMenu("")
 
-        elif password == "exit010":
-            if exit_code() is True :
-                close_the_page()
-                welcome("Anda telah keluar menggunakan kode eksekusi. ")
-            else:
-                on_the_same_page()
+        elif password == "*":
+            close_the_page()
+            welcome("Proses log in dibatalkan.")
 
         # jika password salah
         else:
@@ -268,10 +236,6 @@ def staff_MainMenu(warning):
         elif layanan == "0":
             welcome("")
 
-        elif layanan == "exit010":
-            if exit_code() is True :
-                welcome("Anda telah keluar menggunakan kode eksekusi. ")
-
         elif layanan == "":
             staff_MainMenu('Harap pilih opsi terlebih dahulu!')
 
@@ -317,10 +281,6 @@ def patient_MainMenu(warning):
         elif layanan == "0":
             welcome("")
 
-        elif layanan == "exit010":
-            if exit_code() is True :
-                welcome("Anda telah keluar menggunakan kode eksekusi. ")
-
         elif layanan == "":
             patient_MainMenu('Harap pilih opsi terlebih dahulu!')
 
@@ -342,6 +302,7 @@ def in_staff_mode():
         return False
     else:
         return True
+
 
 # JUDUL RUMAH SAKIT
 def hospital_title(): 
@@ -380,6 +341,10 @@ def string_checker(string):
         else:
             return True
 
+# FUNGSI CEK ALFABET
+def alpha_checker(string):
+    return string.isalpha()
+
 # FUNGSI CEK INTEGER  
 def integer_checker(integer):
     try :
@@ -387,7 +352,17 @@ def integer_checker(integer):
     except ValueError:
         return False
     else:
+        if decimal_checker(integer) is True:
+            return True
+        else:
+            return False
+
+# FUNGSI CEK ANGKA ASLI
+def decimal_checker(integer):
+    if integer.isdecimal() is True:
         return True
+    else:
+        return False
 
 # FUNGSI CEK 0 DI AWAL
 def zero_checker(string):
@@ -487,20 +462,19 @@ def close_the_page():
 def guide_color(guide):
     print(Fore.LIGHTBLACK_EX + guide.center(100) + Fore.RESET)
 
-# FUNGSI KELUAR OTOMATIS
-def exit_code():
+# FUNGSI BATAL ISI FORMULIR
+def cancel_the_form():
     clear()
     print("\n\n\n\n\n")
-    print("Anda telah menuliskan kode exit program.".center(100))
-    print("Apakah Anda ingin pergi sekarang?".center(100))
+    print("Apakah Anda ingin menghentikan kegiatan Anda?".center(100))
 
     print()
     print(Fore.LIGHTRED_EX + "Harap diperhatikan!".center(100))
     print("Pergi sekarang tidak akan menyimpan seluruh aktivitas Anda saat ini.".center(100) + Fore.RESET)
-    guide_color("(Ketik * untuk pergi)")
+    guide_color("(Ketik '1' untuk pergi)")
 
-    exit101 = input("\n\t\t\t\t\t>>> ")
-    if exit101 == "*":
+    cancel = input("\n\t\t\t\t\t>>> ")
+    if cancel == "1":
         return True
     else:
         return False
@@ -537,10 +511,6 @@ def staff_SubMenu(service, menu_, print_, edit_, warning):
         elif opsi == "0":
             staff_MainMenu("")
 
-        elif opsi == "exit010":
-            if exit_code() is True :
-                welcome("Anda telah keluar menggunakan kode eksekusi. ")
-
         elif opsi == "":
             staff_SubMenu(service, print_, edit_, menu_, 'Harap pilih opsi terlebih dahulu!')
 
@@ -551,8 +521,10 @@ def staff_SubMenu(service, menu_, print_, edit_, warning):
 def reg_page(service, patientData, patientForm, update_, warning):
     clear()
     function_title(service, "Registrasi Pasien Baru")
+    guide_color("(Ketik '*' untuk membatalkan proses registrasi)")
     print("\n")
 
+    # ketika pertama kali membuka halaman ini
     if on_the_new_page() is True:
         global new_patient
         new_list = []
@@ -571,17 +543,19 @@ def reg_page(service, patientData, patientForm, update_, warning):
     # menyimpan identitas pasien
     for i in patientForm:
         for section, forms in i.items():
-            index_section = patientForm.index(i)
+            section_index = patientForm.index(i)
 
+            # data default
             if section == "Registrasi":
                 print(f"\t\tTanggal Registrasi : {new_patient[0][0]}")
-                print(f"\t\tNo. Pasien : {new_patient[0][1]}")
+                print(f"\t\tNo. Pasien : {new_patient[0][1]} \n")
                     
-                print("\n", Fore.RED + f"{warning}".center(100) + Fore.RESET)
-                
+                print(Fore.RED + f"{warning}".center(100) + Fore.RESET)
                 continue
             
+            # data diisi pasien
             else:
+                # judul tiap bagian
                 if section == "Kelas Perawatan yang Diminta" or section == "Triage Status":
                     break
                 else:
@@ -592,60 +566,64 @@ def reg_page(service, patientData, patientForm, update_, warning):
                         guide_color("(Isi 'Ya' atau 'Tidak')")
                     print()
 
-            for index_question in range(len(forms)):
-                form = forms[index_question]
+            # formulir yang ditampilkan
+            for question_index in range(len(forms)):
+                question = forms[question_index]
 
-                if section == "Anamnesis" and index_question == 1:
+                # aturan mengisi pada bagian anamnesis
+                if section == "Anamnesis" and question_index == 1:
                     print()
                     guide_color("(Isi 'Ya' atau 'Tidak')")
                     print()
 
-                print(f"\t\t\t\t{form.ljust(22)} : ", end="")
+                # pertanyaan yang harus diisi
+                print(f"\t\t\t\t{question.ljust(27)} : ", end="")
 
+                # jawaban pasien
                 try :
-                    print(new_patient[index_section][index_question])
+                    print(new_patient[section_index][question_index])
                 except IndexError:
                     input_question = input("")
 
-                    # PERATURAN
+                    # aturan dalam pengisian
                     if input_question == "" or space_checker(input_question) is True:
                         on_the_same_page()
                         reg_page(service, patientData, patientForm, update_, "Harap untuk tidak mengosongkan formulir!")
 
-                    elif input_question == "exit010":
-                        if exit_code() is True :
+                    elif input_question == "*":
+                        if cancel_the_form() is True :
                             close_the_page()
                             del patientData[len(patientData)-1]
-                            welcome("Anda telah keluar menggunakan kode eksekusi. ")
+                            patient_MainMenu(f"Proses registrasi {service} dibatalkan.")
                         else:
                             on_the_same_page()
                             reg_page(service, patientData, patientForm, update_, "")
 
                     else:
-                        if form_checker(section, form, input_question) is True:
+                        if form_checker(section, question, input_question) is True:
                             pass
                         else:
                             on_the_same_page()
-                            reg_page(service, patientData, patientForm, update_, form_checker(section, form, input_question))
+                            reg_page(service, patientData, patientForm, update_, form_checker(section, question, input_question))
                         
-                        if section == "Anamnesis" and index_question > 0:
+                        # khusus bagian anamnesis diperlukan keterangan
+                        if section == "Anamnesis" and question_index > 0:
                             if input_question.casefold() == "ya" or input_question.casefold() == "y" or input_question.casefold() == "yes":
                                 keterangan = input("\t\t\t\t- Keterangan : ")
                                 if keterangan == "" or space_checker(keterangan) is True:
                                     on_the_same_page()
                                     reg_page(service, patientData, patientForm, update_, "Harap untuk tidak mengosongkan formulir!")
-                                elif keterangan == "exit010":
-                                    if exit_code() is True :
+                                elif keterangan == "*":
+                                    if cancel_the_form() is True :
                                         close_the_page()
                                         del patientData[len(patientData)-1]
-                                        welcome("Anda telah keluar menggunakan kode eksekusi. ")
+                                        patient_MainMenu(f"Proses registrasi {service} dibatalkan.")
                                     else:
                                         on_the_same_page()
                                         reg_page(service, patientData, patientForm, update_, "")
                                 else:
                                     input_question = f"{input_question}, {keterangan}"
-                    new_patient[index_section].append(input_question)
-
+                    new_patient[section_index].append(input_question)
                 else:
                     pass
 
@@ -655,13 +633,6 @@ def reg_page(service, patientData, patientForm, update_, warning):
     if ubah == "1":
         close_the_page()
         update_(new_patient[0][1])
-    elif ubah == "exit010":
-        if exit_code() is True :
-            close_the_page()
-            welcome("Anda telah keluar menggunakan kode eksekusi.")
-        else:
-            on_the_same_page()
-            reg_page(service, patientData, patientForm, update_, "")
     else:
         input("\n\n\t\tKembali ke menu sebelumnya => ")
         close_the_page()
@@ -671,11 +642,13 @@ def reg_page(service, patientData, patientForm, update_, warning):
 def staff_form_page(service, patientNum, patientData, patientForm, update_, menu_, warning):
     clear()
     function_title(service, "Pengisian Formulir oleh Petugas")
+    guide_color("(Ketik '*' untuk membatalkan pengisian formulir)")
     print("\n")
 
     add_data = patientData[patientNum -1]
     prev_data = add_data.copy()
 
+    # ketika pertama kali membuka halaman
     if on_the_new_page() is True:
         global add_list
         add_list = []
@@ -684,36 +657,43 @@ def staff_form_page(service, patientNum, patientData, patientForm, update_, menu
         for section, forms in i.items():
             section_index = patientForm.index(i)
 
+            # hanya bagian ini yang diisi
             if section == "Kelas Perawatan yang Diminta" or section == "Triage Status":
                 print(f"\t\t\t Tanggal Registrasi : {add_data[0][0]}")
                 print(f"\t\t\t No. Pasien : {patientNum}")
                 print(f"\t\t\t Nama Pasien : {add_data[1][0]} \n")
 
+                # judul bagian
                 print(f"-- {section.upper()} --".center(100))
                 print()
                 print(Fore.RED + f"{warning}".center(100) + Fore.RESET)
                 print()
 
+                # formulir yang ditampilkan 
                 for question_index in range(len(forms)):
                     form = forms[question_index]
                     
-                    if len(add_list) <= len(forms):
-                        print(f"\t\t\t\t{form.ljust(22)} : ", end="")
+                    # selama formulir belum terisi semua
+                    if len(add_list) < len(forms):
+                        # pertanyaa yang harus diisi
+                        print(f"\t\t\t\t{form.ljust(27)} : ", end="")
+
+                        # jawaban petugas
                         try:
                             print(add_list[question_index])
                         except IndexError:
                             input_data = input("")
                             
-                            # PERATURAN
+                            # aturan dalam pengisian
                             if input_data == "" or space_checker(input_data) is True:
                                 on_the_same_page()
                                 staff_form_page(service, patientNum, patientData, patientForm, update_, menu_, "Harap tidak mengosongkan formulir")
-                            elif input_data == "exit010":
-                                if exit_code() is True :
+                            elif input_data == "*":
+                                if cancel_the_form() is True :
                                     close_the_page()
                                     del add_data
                                     patientData.insert(patientNum-1, prev_data)
-                                    welcome("Anda telah keluar menggunakan kode eksekusi. ")
+                                    update_page(service, patientNum, patientData, patientForm, update_, menu_, "Pengisian formulir oleh petugas dibatalkan.")
                                 else:
                                     on_the_same_page()
                                     staff_form_page(service, patientNum, patientData, patientForm, update_, menu_, "")
@@ -725,13 +705,11 @@ def staff_form_page(service, patientNum, patientData, patientForm, update_, menu
                                     staff_form_page(service, patientNum, patientData, patientForm, update_, menu_, form_checker(section, form, input_data))
 
                             add_list.append(input_data)
-                        add_data[section_index] = add_list
-                    else:
-                        close_the_page()
-                        break
+
+                add_data[section_index] = add_list
+                close_the_page()
                 break
-         
-                              
+                                        
 # HALAMAN PERBARUI FORMULIR
 def update_page(service, patientNum, patientData, patientForm, update_, menu_, warning):
     clear()
@@ -742,6 +720,7 @@ def update_page(service, patientNum, patientData, patientForm, update_, menu_, w
     # data yg ingin di-update
     update_patient = patientData[patientNum-1]
 
+    # ketika pertama kali membuka halaman
     if on_the_new_page() is True:
         global sign
         sign = []
@@ -749,11 +728,12 @@ def update_page(service, patientNum, patientData, patientForm, update_, menu_, w
             data = []
             sign.append(data)
 
+    # edit data pasien
     for i in patientForm:
         for section, forms in i.items():
-
             index_section = patientForm.index(i)
 
+            # data default
             if section == "Registrasi":
                 for form in forms:
                     index_data = forms.index(form)
@@ -763,34 +743,33 @@ def update_page(service, patientNum, patientData, patientForm, update_, menu_, w
                 
 
             else:
+                # bagian yang hanya bisa diedit petugas
                 if section == "Kelas Perawatan yang Diminta" or section == "Triage Status":
                     if in_staff_mode() is True:
                         pass
                     else:
                         break
-                else:
-                    pass
 
+                # judul tiap bagian
                 print("\n")
                 print(f"-- {section.upper()} --".center(100))
-
                 if section == "Kebiasaan" or section == "Riwayat Penyakit Keluarga":
                     guide_color("(Isi dengan 'Ya' atau 'Tidak')")
                 elif section == "Kelas Perawatan yang Diminta" or section == "Triage Status":
                     guide_color("(Bagian berikut diisi oleh petugas yang bersangkutan)")
                 else:
                     pass
-
                 print()
 
-                # tampilan form
+                # formulir yang ditampilkan
                 for index_question in range(len(forms)):
-                    form = forms[index_question]
+                    question = forms[index_question]
 
+                    # jika data telah dikonfirmasi petugas (rawat inap dan gawat darurat)
                     completed = len(update_patient[index_section]) != 0
                     if section == "Kelas Perawatan yang Diminta" or section == "Triage Status":
                         if completed is False:
-                            print("Data belum diisi oleh petugas.".center(100))
+                            print(Fore.YELLOW + "Data belum diisi oleh petugas.".center(100) + Fore.RESET)
                             guide_color("(Ketik '1' untuk mengisi)")
                             YESorNO = input("\n\t\t\t\t\t\t>>> ")
                             if YESorNO == "1":
@@ -798,16 +777,10 @@ def update_page(service, patientNum, patientData, patientForm, update_, menu_, w
                                 staff_form_page(service, patientNum, patientData, patientForm, update_, menu_, "")
                                 
                                 break
-                            elif YESorNO == "exit010":
-                                if exit_code() is True :
-                                    close_the_page()
-                                    welcome("Anda telah keluar menggunakan kode eksekusi. ")
-                                else:
-                                    on_the_same_page()
-                                    update_page(service, patientNum, patientData, patientForm, update_, menu_, "")
                             else:
                                 break
      
+                    # aturan mengisi pada bagian anamnesis
                     if section == "Anamnesis" and index_question == 1:
                         print()
                         guide_color("(Isi 'Ya' atau 'Tidak')")
@@ -815,30 +788,26 @@ def update_page(service, patientNum, patientData, patientForm, update_, menu_, w
                     else:
                         pass
                     
-                    print(f"\t\t\t{form.ljust(27)} : {update_patient[index_section][index_question].ljust(20)} {'|'.rjust(2)}", end="")
+                    # pertanyaan yang akan diedit
+                    print(f"\t\t\t{question.ljust(27)} : {update_patient[index_section][index_question].ljust(20)} {'|'.rjust(2)}", end="")
 
+                    # jawaban
                     try :
-                        print(f"{sign[index_section][index_question]}")
+                        print(sign[index_section][index_question])
                     except IndexError:
-                        update_data = input(f" ")
+                        update_data = input(" ")
 
-                        # PERATURAN
+                        # aturan dalam pengisian
                         if update_data == "" or space_checker(update_data) is True:
                             pass
-                        elif update_data == "exit010":
-                            if exit_code() is True :
-                                close_the_page()
-                                welcome("Anda telah keluar menggunakan kode eksekusi. ")
-                            else:
-                                on_the_same_page()
-                                update_page(service, patientNum, patientData, patientForm, update_, menu_, "")
                         else:
-                            if form_checker(section, form, update_data) is True:
+                            if form_checker(section, question, update_data) is True:
                                 pass
                             else:
                                 on_the_same_page()
-                                update_page(service, patientNum, patientData, patientForm, update_, menu_,form_checker(section, form, update_data))
+                                update_page(service, patientNum, patientData, patientForm, update_, menu_,form_checker(section, question, update_data))
 
+                            # khusus bagian anamnesis diperlukan keterangan
                             if section == "Anamnesis" and index_question > 0:
                                 if update_data.casefold() == "ya" or update_data.casefold() == "y" or update_data.casefold() == "yes":
                                     keterangan = input("\t\t\t- Keterangan : ")
@@ -850,67 +819,43 @@ def update_page(service, patientNum, patientData, patientForm, update_, menu_, w
                                         except IndexError:
                                             on_the_same_page()
                                             update_page(service, patientNum, patientData, patientForm, update_, menu_, "Harap untuk tidak mengosongkan formulir!")
-                        
-                                    elif keterangan == "exit010":
-                                        if exit_code() is True :
-                                            close_the_page()
-                                            welcome("Anda telah keluar menggunakan kode eksekusi. ")
-                                        else:
-                                            on_the_same_page()
-                                            update_page(service, patientNum, patientData, patientForm, update_, menu_, "")
+                    
                                     else:
                                         update_data = f"{update_data}, {keterangan}"
 
                             update_patient[index_section][index_question] = update_data
                         sign[index_section].append("")
-    else:
-        print("\n\n\t\tData telah berhasil diperbarui.")
+
+    print("\n\n\t\tData telah berhasil diperbarui.")
         
+    close_the_page()
     ubah = input("\n\t\tApabila masih ingin mengubah data ketik '1'\n\t\t>>> ")
     if ubah == "1":
-        close_the_page()
         update_(patientNum)
-    elif ubah == "exit010":
-        if exit_code() is True :
-            close_the_page()
-            welcome("Anda telah keluar menggunakan kode eksekusi. ")
-        else:
-            on_the_same_page()
-            update_page(service, patientNum, patientData, patientForm, update_, menu_, "")
     else:
-        back = (input("\n\n\t\tKembali ke menu sebelumnya => "))
-
-        if back == "exit010":
-            if exit_code() is True :
-                close_the_page()
-                welcome("Anda telah keluar menggunakan kode eksekusi. ")
-            else:
-                on_the_same_page()
-                update_page(service, patientNum, patientData, patientForm, update_, menu_, "")
-
-        elif in_staff_mode() is True:
-            close_the_page()
+        input("\n\n\t\tKembali ke menu sebelumnya => ")
+        if in_staff_mode() is True:
             menu_()
-
         else:
-            close_the_page
             finish()
 
 # HALAMAN TAMPILKAN DATA
 def show_page(service, patientData, patientForm, menu_, warning):
     clear()
     function_title(service, "Tampilkan Data Pasien")
+    guide_color("(Ketik '*' untuk kembali ke menu sebelumnya)")
     print("\n")
 
+    # fungsi menampilkan 1 data pasien
     def show_data(data):
         for i in patientForm:
             for section, forms in i.items():
-                index_section = patientForm.index(i)
+                section_index = patientForm.index(i)
 
-                if index_section == 0:
+                if section_index == 0:
                     for form in forms:
                         index_data = forms.index(form)
-                        print(f"\t\t{form} : {data[index_section][index_data]}")
+                        print(f"\t\t{form} : {data[section_index][index_data]}")
                 else:
                     print("\n")
                     print(f"-- {section.upper()} --".center(100))
@@ -919,7 +864,7 @@ def show_page(service, patientData, patientForm, menu_, warning):
                     index_data = 0
                     for form in forms:
                         try :
-                            print(f"\t\t\t\t{form.ljust(27)} : {data[index_section][index_data].ljust(20)}")
+                            print(f"\t\t\t\t{form.ljust(27)} : {data[section_index][index_data].ljust(20)}")
                         except IndexError:
                             print(Fore.YELLOW + "Data belum diisi oleh petugas.".center(100) + Fore.RESET)
                             print()
@@ -927,7 +872,7 @@ def show_page(service, patientData, patientForm, menu_, warning):
 
                         index_data += 1
         
-    # banyak data pasien yg tersimpan dalam list (patientsMCU, patientsRawatJalan, dll)
+    # banyak data pasien yg tersimpan dalam list (MCU_patients, RawatJalan_patients, dll)
     jumlah = len(patientData)
 
     # jika belum ada data yg tersimpan
@@ -945,9 +890,8 @@ def show_page(service, patientData, patientForm, menu_, warning):
         # mesin pencarian
         no_pasien = input("\t\tNo. Pasien: ")
         # jika inputnya bukan angka 
-        if no_pasien == "exit010":
-            if exit_code() is True :
-                welcome("Anda telah keluar menggunakan kode eksekusi. ")
+        if no_pasien == "*":
+            menu_()
 
         if integer_checker(no_pasien) is False:
             show_page(service, patientData, patientForm, menu_, "Harap isi dengan angka!")
@@ -973,26 +917,26 @@ def show_page(service, patientData, patientForm, menu_, warning):
                         # data yg akan ditampilkan
                         print_data = patientData[index]
 
-                        # jika data pasien telah dihapus
+                        # datanya sudah terhapus
                         if len(print_data) == 0:
                             print("\n\n\n")
-                            print("Data pasien ini telah dihapus sebelumnya.".center(100))
+                            print(Fore.YELLOW + "Data pasien ini telah dihapus sebelumnya.".center(100) + Fore.RESET)
                             print("\n\n")
                             
-                        # jika data pasien masih tersimpan
+                        # datanya masih tersimpan
                         else:
                             show_data(print_data)
                                     
                         index += 1
                 
-                # jika mesin pencarian diisi no. pasien yg datanya sudah dihapus
+                # datanya sudah dihapus
                 elif len(patientData[int(no_pasien) - 1]) == 0:
                     print(f'{"_"*100}'.center(100))
                     print("\n\n")
-                    print("Data pasien ini telah dihapus sebelumnya.".center(100))
+                    print(Fore.YELLOW + "Data pasien ini telah dihapus sebelumnya.".center(100) + Fore.RESET)
                     print("\n\n")
             
-                # jika mesin pencarian diisi no. pasien yg datanya masih tersimpan
+                # datanya masih tersimpan
                 else:
                     print()
                     print(f'{"_"*100}'.center(100))
@@ -1009,50 +953,53 @@ def show_page(service, patientData, patientForm, menu_, warning):
                 show_page(service, patientData, patientForm, menu_ ,"No. Pasien tidak terdaftar!")
 
     # sesi telah selesai
-    back = input("\n\n\t\tKembali ke menu sebelumnya => ")
-    if back == "exit010":
-        if exit_code() is True :
-            welcome("Anda telah keluar menggunakan kode eksekusi. ")
-        else:
-            show_page(service, patientData, patientForm, menu_, "Harap pilih No. Pasien kembali.")
-    else:
-        menu_()
+    input("\n\n\t\tKembali ke menu sebelumnya => ")
+    menu_()
 
 # HALAMAN EDIT DATA
 def edit_page(service, patientData, patientForm, update_, menu_, warning):
     while True:
         clear()
         function_title(service, "Edit Data Pasien")
-        guide_color("(Ketik '0' untuk kembali ke menu sebelumnya)")
         print("")
 
         # FUNGSI PERBARUI DATA
         def update_menu(warning):
             clear()
             function_title(service, "Perbarui Data Pasien")
+            guide_color("(Ketik '*' untuk kembali ke menu sebelumnya)")
             print("\n")
-            # banyak data pasien yg tersimpan dalam patientData (patientsMCU, patientsRawatJalan, dll)
+            # banyak data pasien yg tersimpan dalam patientData (MCU_patients, RawatJalan_patients, dll)
             jumlah = len(patientData)
 
-            if patientData == patientsRawatInap or patientData == patientsGawatDarurat:
-                def checked():
+            if patientData == RawatInap_patients or patientData == GawatDarurat_patients:
+                def not_checked():
                     confirmed = 0
                     data_index_ke = 0
+                    list_data = []
 
                     while data_index_ke < len(patientData):
                         for i in patientForm:
                             for section in i.keys():
                                 if section == "Kelas Perawatan yang Diminta" or section == "Triage Status":
                                     section_index = patientForm.index(i)
-                                    completed = len(patientData[data_index_ke][section_index])
-                                    if completed != 0:
-                                        confirmed += 1
+                                    data = patientData[data_index_ke][section_index]
+                                    list_data.append(data)
                         data_index_ke += 1
-                    return confirmed
+
+                    list_isi = []
+                    for data in list_data:
+                        isi = len(data)
+                        list_isi.append(isi)
+                    
+                    if 0 in list_isi:
+                        return list_isi.count(0)
+                    else:
+                        return 0
 
                 print(f"\t\tTerdapat {jumlah} data pasien yang tersimpan. ")
-                if checked() == 0:
-                    print(Fore.YELLOW + f"\t\t• {jumlah - checked()} data belum dikonfirmasi" + Fore.RESET, "\n")
+                if not_checked() > 0:
+                    print(Fore.YELLOW + f"\t\t• {not_checked()} data belum dikonfirmasi" + Fore.RESET, "\n")
                 else:
                     pass
 
@@ -1064,20 +1011,17 @@ def edit_page(service, patientData, patientForm, update_, menu_, warning):
 
             # mesin pencarian
             no_pasien = input("\t\tNo. Pasien: ")
-            if no_pasien == "exit010":
-                if exit_code() is True :
-                    welcome("Anda telah keluar menggunakan kode eksekusi. ")
-                else:
-                    update_menu("")
 
+            # jika ingin kembali
+            if no_pasien == "*":
+                edit_page(service, patientData, patientForm, update_, menu_, warning)
             # jika inputnya bukan angka    
             elif integer_checker(no_pasien) is False:
                 update_menu("Harap isi dengan angka!")
             # jika inputnya angka
             else:
-
                 # jika mesin pencarian diisi angka no. pasien
-                if 1 <= int(no_pasien) <= jumlah :
+                if 1 <= int(no_pasien) <= jumlah:
                     update_data = patientData[int(no_pasien) - 1]
 
                     # jika no. pasien gak jelas (0000, 0001, dll)
@@ -1087,7 +1031,7 @@ def edit_page(service, patientData, patientForm, update_, menu_, warning):
                     # jika mesin pencarian diisi no. pasien yg datanya sudah dihapus
                     elif len(update_data) == 0:
                         print("\n\n\n")
-                        print("Data pasien ini telah dihapus sebelumnya.".center(100))
+                        print(Fore.YELLOW + "Data pasien ini telah dihapus sebelumnya.".center(100) + Fore.RESET)
                         print("\n\n")
 
                     # jika mesin pencarian diisi no. pasien yg datanya masih tersimpan
@@ -1102,9 +1046,10 @@ def edit_page(service, patientData, patientForm, update_, menu_, warning):
         def delete_menu(warning):
             clear()
             function_title(service, "Hapus Data Pasien")
+            guide_color("(Ketik '*' untuk kembali ke menu sebelumnya)")
             print("\n")
 
-            # banyak data pasien yg tersimpan dalam patientData (patientsMCU, patientsRawatJalan, dll)
+            # banyak data pasien yg tersimpan dalam patientData (MCU_patients, RawatJalan_patients, dll)
             jumlah = len(patientData)
 
             print(f"\t\tTerdapat {jumlah} data pasien yang tersimpan.\n")
@@ -1115,11 +1060,8 @@ def edit_page(service, patientData, patientForm, update_, menu_, warning):
 
             no_pasien = input("\t\tNo. Pasien: ")
 
-            if no_pasien == "exit010":
-                if exit_code() is True :
-                    welcome("Anda telah keluar menggunakan kode eksekusi. ")
-                else:
-                    delete_menu("")
+            if no_pasien == "*":
+                edit_page(service, patientData, patientForm, update_, menu_, warning)
 
             # jika inputnya bukan angka    
             elif integer_checker(no_pasien) is False:
@@ -1140,12 +1082,12 @@ def edit_page(service, patientData, patientForm, update_, menu_, warning):
                     # jika data sudah dihapus sebelumnya
                     if len(delete_data) == 0:
 
-                        print("\n\n\n")
-                        print("Data pasien ini telah dihapus sebelumnya.".center(100))
+                        print("\n\n\n\n\n\n\n\n\n")
+                        print(Fore.YELLOW + "Data pasien ini telah dihapus sebelumnya.".center(100) + Fore.RESET)
                         print("\n\n")
 
                     else:
-                        print(f"\n\n\n\n\n",f"Apakah Anda yakin ingin menghapus data pasien no. {no_pasien}".center(100))
+                        print(f"\n\n\n\n\n\n\n\n",f"Apakah Anda yakin ingin menghapus data pasien no. {no_pasien}".center(100))
                         print(f"atas nama {delete_data[1][0]}?".center(100))
                         guide_color("(Ketik '1' untuk hapus data pasien)")
                         delete = input("\n\t\t\t\t\t>>> ")
@@ -1155,26 +1097,21 @@ def edit_page(service, patientData, patientForm, update_, menu_, warning):
                             delete_data.clear()
 
                             clear()
-                            print("\n\n\n\n\n\n")
-                            print(f"Data pasien no. {no_pasien} berhasil dihapus.".center(100))
-
-                        elif delete == "exit010":
-                            if exit_code() is True :
-                                welcome("Anda telah keluar menggunakan kode eksekusi. ")
-                            else:
-                                delete_menu("Harap pilih kembali No. Pasien.")
+                            print("\n\n\n\n\n\n\n\n")
+                            print(Fore.LIGHTGREEN_EX + f"Data pasien no. {no_pasien} berhasil dihapus.".center(100) + Fore.RESET)
                         
                         # jika inputnya sembarang, data tidak jadi dihapus
                         else:
                             clear()
                             print("\n\n\n\n\n\n")
-                            print(f"Aktivitas dibatalkan.".center(100))
+                            print(Fore.RED + "Aktivitas dibatalkan.".center(100) + Fore.RESET)
+                            print()
 
                     # jika mesin pencarian diisi angka bukan no. pasien
                 else:
                     delete_menu("No. Pasien tidak terdaftar!")
 
-        # banyak data pasien yg tersimpan dalam list (patientsMCU, patientsRawatJalan, dll)
+        # banyak data pasien yg tersimpan dalam list (MCU_patients, RawatJalan_patients, dll)
         jumlah = len(patientData)
 
         # jika belum ada data yg tersimpan
@@ -1186,6 +1123,7 @@ def edit_page(service, patientData, patientForm, update_, menu_, warning):
             # opsi yang disediakan
             print(Fore.RED + f"{warning}".center(100) + Fore.RESET, "\n")
             print("(1) Perbarui data      (2) Hapus data".center(100))
+            guide_color("(Ketik '0' untuk kembali ke menu sebelumnya)")
             pilih = input("\n\n\t\t\t\t\t>>> ")
 
             if len(pilih) == 0:
@@ -1200,21 +1138,11 @@ def edit_page(service, patientData, patientForm, update_, menu_, warning):
             elif pilih == "0":
                 menu_()
 
-            elif pilih == "exit010":
-                if exit_code() is True :
-                    welcome("Anda telah keluar menggunakan kode eksekusi. ")
-
             else:
                 edit_page(service, patientData, patientForm, update_, menu_, "Opsi tidak tersedia!")
         
-        back = input("\n\n\t\tKembali ke menu sebelumnya => ")
-        if back == "exit010":
-            if exit_code() is True :
-                welcome("Anda telah keluar menggunakan kode eksekusi. ")
-            else:
-                continue
-        else:
-            menu_()
+        input("\n\n\t\tKembali ke menu sebelumnya => ")
+        menu_()
 
 
 # ---------------------------------- MEDICAL CHECK UP ----------------------------------
@@ -1226,19 +1154,19 @@ def MCU_menu():
 
 # TAMPILKAN DATA MCU
 def MCU_print():
-    show_page("Medical Check Up", patientsMCU, formMCU, MCU_menu, "")
+    show_page("Medical Check Up", MCU_patients, MCU_form, MCU_menu, "")
 
 # EDIT DATA MCU
 def MCU_edit():
-    edit_page("Medical Check Up", patientsMCU, formMCU, MCU_update, MCU_menu, "")
+    edit_page("Medical Check Up", MCU_patients, MCU_form, MCU_update, MCU_menu, "")
 
 # PERBARUI FORMULIR MCU
 def MCU_update(patientNum):
-    update_page("Medical Check Up", patientNum, patientsMCU, formMCU, MCU_update, MCU_menu, "")
+    update_page("Medical Check Up", patientNum, MCU_patients, MCU_form, MCU_update, MCU_menu, "")
     
 # REGISTRASI MCU
 def MCU_reg():       
-    reg_page("Medical Check Up", patientsMCU, formMCU, MCU_update, "")
+    reg_page("Medical Check Up", MCU_patients, MCU_form, MCU_update, "")
     
 
 # ---------------------------------- RAWAT JALAN ----------------------------------
@@ -1250,19 +1178,19 @@ def RawatJalan_menu():
 
 # TAMPILKAN DATA RAWAT JALAN
 def RawatJalan_print():
-    show_page("Rawat Jalan", patientsRawatJalan, formRawatJalan, RawatJalan_menu, "")
+    show_page("Rawat Jalan", RawatJalan_patients, RawatJalan_form, RawatJalan_menu, "")
 
 # EDIT DATA RAWAT JALAN
 def RawatJalan_edit():
-    edit_page("Rawat Jalan", patientsRawatJalan, RawatJalan_update, formRawatJalan, RawatJalan_menu, "")
+    edit_page("Rawat Jalan", RawatJalan_patients, RawatJalan_form, RawatJalan_update, RawatJalan_menu, "")
 
 # PERBARUI FORMULIR RAWAT JALAN
 def RawatJalan_update(patientNum):
-    update_page("Rawat Jalan", patientNum, patientsRawatJalan, formRawatJalan, RawatJalan_update, RawatJalan_menu,"")
+    update_page("Rawat Jalan", patientNum, RawatJalan_patients, RawatJalan_form, RawatJalan_update, RawatJalan_menu,"")
   
 # REGISTRASI RAWAT JALAN
 def RawatJalan_reg():
-    reg_page("Rawat Jalan", patientsRawatJalan, formRawatJalan, RawatJalan_update, "")
+    reg_page("Rawat Jalan", RawatJalan_patients, RawatJalan_form, RawatJalan_update, "")
 
 
 # ---------------------------------- RAWAT INAP ----------------------------------
@@ -1274,19 +1202,19 @@ def RawatInap_menu():
 
 # TAMPILKAN DATA RAWAT INAP
 def RawatInap_print():
-    show_page("Rawat Inap", patientsRawatInap, formRawatInap, RawatInap_menu, "")
+    show_page("Rawat Inap", RawatInap_patients, RawatInap_form, RawatInap_menu, "")
 
 # EDIT DATA RAWAT INAP
 def RawatInap_edit():
-    edit_page("Rawat Inap", patientsRawatInap, formRawatInap, RawatInap_update, RawatInap_menu,"")
+    edit_page("Rawat Inap", RawatInap_patients, RawatInap_form, RawatInap_update, RawatInap_menu,"")
 
 # PERBARUI DATA RAWAT INAP
 def RawatInap_update(patientNum):
-    update_page("Rawat Inap", patientNum, patientsRawatInap, formRawatInap, RawatInap_update, RawatInap_menu,"")
+    update_page("Rawat Inap", patientNum, RawatInap_patients, RawatInap_form, RawatInap_update, RawatInap_menu,"")
 
 # REGISTRASI RAWAT INAP
 def RawatInap_reg():
-    reg_page("Rawat Inap", patientsRawatInap, formRawatInap, RawatInap_update, "")
+    reg_page("Rawat Inap", RawatInap_patients, RawatInap_form, RawatInap_update, "")
 
 
 # ---------------------------------- GAWAT DARURAT ----------------------------------
@@ -1298,19 +1226,19 @@ def GawatDarurat_menu():
 
 # TAMPILKAN DATA GAWAT DARURAT
 def GawatDarurat_print():
-    show_page("Gawat Darurat", patientsGawatDarurat, formGawatDarurat, GawatDarurat_menu, "")
+    show_page("Gawat Darurat", GawatDarurat_patients, GawatDarurat_form, GawatDarurat_menu, "")
 
 # EDIT DATA GAWAT DARURAT
 def GawatDarurat_edit():
-    edit_page("Gawat Darurat", patientsGawatDarurat, formGawatDarurat, GawatDarurat_update, GawatDarurat_menu, "")
+    edit_page("Gawat Darurat", GawatDarurat_patients, GawatDarurat_form, GawatDarurat_update, GawatDarurat_menu, "")
 
 # PERBARUI DATA GAWAT DARURAT
 def GawatDarurat_update(patientNum):
-    update_page("Gawat Darurat", patientNum, patientsGawatDarurat, formGawatDarurat, GawatDarurat_update, GawatDarurat_menu,"")
+    update_page("Gawat Darurat", patientNum, GawatDarurat_patients, GawatDarurat_form, GawatDarurat_update, GawatDarurat_menu,"")
 
 # REGISTRASI GAWAT DARURAT
 def GawatDarurat_reg():
-    reg_page("Gawat Darurat", patientsGawatDarurat, formGawatDarurat, GawatDarurat_update, "")
+    reg_page("Gawat Darurat", GawatDarurat_patients, GawatDarurat_form, GawatDarurat_update, "")
 
 
 # -------------------------------- STATISTIK RUMAH SAKIT --------------------------------
@@ -1334,15 +1262,11 @@ def statistics():
             print(f"\n\t\t{service.ljust(17)}", Back.LIGHTWHITE_EX + '  '*n + Back.RESET, n)
 
         print(f"\t\t{'_'*75}")
-        print(f"\n\t\t\t\t\t\t\t\t\tTotal pasien : {len(patientsMCU) + len(patientsRawatJalan) + len(patientsRawatInap) + len(patientsGawatDarurat)}")
+        print(f"\n\t\t\t\t\t\t\t\t\tTotal pasien : {len(MCU_patients) + len(RawatJalan_patients) + len(RawatInap_patients) + len(GawatDarurat_patients)}")
         
         # sesi telah selesai
-        back = input("\n\n\t\tKembali ke menu sebelumnya => ")
-        if back == "exit010":
-                if exit_code() is True :
-                    welcome("Anda telah keluar menggunakan kode eksekusi. ")
-        else:
-            staff_MainMenu("")
+        input("\n\n\t\tKembali ke menu sebelumnya => ")
+        staff_MainMenu("")
 
 
 # ---------------------------------- KELUAR --------------------------------------
@@ -1352,7 +1276,7 @@ def end(warning):
     clear()
 
     # menanyakan apakah ingin keluar
-    print("\n\n\n\n\n","Apakah Anda yakin ingin keluar?".center(100))
+    print("\n\n\n\n\n\n\n\n", "Apakah Anda yakin ingin keluar?".center(100))
     guide_color("(Ketik '1' untuk 'Ya', '0' untuk 'Tidak')")
 
     print("\n", Fore.RED + f"{warning}".center(100) + Fore.RESET, "\n")
@@ -1364,16 +1288,16 @@ def end(warning):
     if keluar == "1":
         clear()
 
-        print("\n\n\n\n\n\n", "Selamat tinggal ~".center(100))
+        print("\n\n\n\n\n\n\n\n", "Selamat tinggal ~".center(100))
         input("\n\t\t\t\t\t    Keluar => ")
 
-        sys.exit()
+        exit()
 
     # jika input 0
     elif keluar == "0":
         clear()
 
-        print("\n\n\n\n\n\n", "Selamat datang kembali ~".center(100))
+        print("\n\n\n\n\n\n\n\n", "Selamat datang kembali ~".center(100))
         input("\n\t\t\t\t\t Kembali ke lobi => ")
 
         welcome("")
@@ -1382,16 +1306,9 @@ def end(warning):
     else:
         end("Harap ketik '1' atau '0'!")
 
-def kickedOut():
-    clear()
-    print("\n\n\n\n\n\n\n")
-    print(Fore.RED + "Anda telah dikeluarkan dari program!".center(100) + Fore.RESET)
-    input("\n\t\t\t\t\tKeluar => ")
-    sys.exit()
-
 def finish():
     clear()
-    print("\n\n\n\n\n\n\n")
+    print("\n\n\n\n\n\n\n\n\n")
     print(Fore.GREEN + "Terima kasih telah mendaftar sebagai pasien di rumah sakit kami ".center(100) + Fore.RESET)
     input("\n\t\t\t\t\tKeluar => ")
     welcome("")
